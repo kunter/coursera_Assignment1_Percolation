@@ -7,22 +7,44 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     boolean[][] grid;
 
-    // create N-by-N grid, with all sites blocked
-    public Percolation(int numberOfGrid) {
-        grid = new boolean[numberOfGrid][numberOfGrid];
+    /**
+     * Create N-by-N grid, with all sites blocked
+     *
+     * @param sizeOfSide is a size of array side.
+     */
+
+    public Percolation(int sizeOfSide) {
+        grid = new boolean[sizeOfSide][sizeOfSide];
     }
 
-    // open site (row i, column j) if it is not open already
+    //
+
+    /**
+     * Open site (row i, column j) if it is not open already. Each site is either open or blocked
+     *
+     * @param i row number
+     * @param j column number
+     */
     public void open(int i, int j) {
         grid[i][j] = true;
     }
 
-    // is site (row i, column j) open?
+    /**
+     * @param i row array number
+     * @param j column array number
+     * @return is site (row i, column j) open?
+     */
     public boolean isOpen(int i, int j) {
         return grid[i][j];
     }
 
-    // is site (row i, column j) full?
+    /**
+     * A full site is an open site that can be connected to an open site in the top row via a chain of neighboring (left, right, up, down) open sites
+     *
+     * @param i row number
+     * @param j column number
+     * @return is site (row i, column j) full
+     */
     public boolean isFull(int i, int j) {
 //        if (isOpen(i,j)){
 //
@@ -30,7 +52,16 @@ public class Percolation {
         throw new UnsupportedOperationException("Not ready yet");
     }
 
-    // does the system percolate?
+    /**
+     * We say the system percolates if there is a full site in the bottom row.
+     * In other words, a system percolates if we fill all open sites connected to the top
+     * row and that process fills some open site on the bottom row.
+     * (For the insulating/metallic materials example, the open sites
+     * correspond to metallic materials, so that a system that percolates
+     * has a metallic path from top to bottom, with full sites conducting.
+     *
+     * @return does the system percolate?
+     */
     public boolean percolates() {
         throw new UnsupportedOperationException("Not ready yet");
     }
