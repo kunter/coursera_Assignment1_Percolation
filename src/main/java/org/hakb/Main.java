@@ -2,5 +2,7 @@ package org.hakb;
 
 
 public class Main {
-
+    public static void main(String args[]) {
+        
+    }
 }
