@@ -1,26 +1,32 @@
 package org.hakb.perlocation;
 
-/**
- * Created by Администратор on 06.09.2015.
- */
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+
 public class Percolation {
+    boolean[][] grid;
+
     // create N-by-N grid, with all sites blocked
-    public Percolation(int N) {
-        throw new UnsupportedOperationException("Not ready yet");
+    public Percolation(int numberOfGrid) {
+        grid = new boolean[numberOfGrid][numberOfGrid];
     }
 
     // open site (row i, column j) if it is not open already
     public void open(int i, int j) {
-        throw new UnsupportedOperationException("Not ready yet");
+        grid[i][j] = true;
     }
 
     // is site (row i, column j) open?
     public boolean isOpen(int i, int j) {
-        throw new UnsupportedOperationException("Not ready yet");
+        return grid[i][j];
     }
 
     // is site (row i, column j) full?
     public boolean isFull(int i, int j) {
+//        if (isOpen(i,j)){
+//
+//        }
         throw new UnsupportedOperationException("Not ready yet");
     }
 
