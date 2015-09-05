@@ -17,8 +17,6 @@ public class Percolation {
         grid = new boolean[sizeOfSide][sizeOfSide];
     }
 
-    //
-
     /**
      * Open site (row i, column j) if it is not open already. Each site is either open or blocked
      *
@@ -46,11 +44,26 @@ public class Percolation {
      * @return is site (row i, column j) full
      */
     public boolean isFull(int i, int j) {
-//        if (isOpen(i,j)){
-//
-//        }
+
         throw new UnsupportedOperationException("Not ready yet");
     }
+
+    private boolean isRightOpen(int i, int j) {
+        return isOpen(++i, j);
+    }
+
+    private boolean isLeftOpen(int i, int j) {
+        return isOpen(--i, j);
+    }
+
+    private boolean isTopOpen(int i, int j) {
+        return isOpen(i, ++j);
+    }
+
+    private boolean isBottomOpen(int i, int j) {
+        return isOpen(i, --j);
+    }
+
 
     /**
      * We say the system percolates if there is a full site in the bottom row.
