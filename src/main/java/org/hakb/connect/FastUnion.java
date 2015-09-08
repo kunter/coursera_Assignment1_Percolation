@@ -1,18 +1,20 @@
 package org.hakb.connect;
 
-public class FastUnion {
+public class FastUnion implements Connectable {
     int array[];
 
     public FastUnion(int[] array) {
         this.array = array;
     }
 
+    @Override
     public void union(int p, int q) {
         int rootP = findRoot(array[p]);
         int rootQ = findRoot(array[q]);
         array[rootP] = rootQ;
     }
 
+    @Override
     public boolean connected(int p, int q) {
         if (findRoot(p) == findRoot(q)) {
             return true;
@@ -53,11 +55,13 @@ public class FastUnion {
         for (int i = 0; i < expectedArray.length; i++) {
             System.out.println(String.format("%b e= %d , a=%d", expectedArray[i] == fastUnion.getArray()[i], expectedArray[i], fastUnion.getArray()[i]));
         }
+        System.out.println(String.format("is connected 5,0 : %b", fastUnion.connected(5, 0)));
 
     }
 
     public static void main(String[] args) {
         test();
+
     }
 
 }
