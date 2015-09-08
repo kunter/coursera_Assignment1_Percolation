@@ -11,6 +11,9 @@ public class Percolation {
 
     public Percolation(int sizeOfSide) {
         grid = new boolean[sizeOfSide][sizeOfSide];
+
+
+
     }
 
     /**
@@ -21,6 +24,7 @@ public class Percolation {
      */
     public void open(int i, int j) {
         grid[i][j] = true;
+
     }
 
     /**
