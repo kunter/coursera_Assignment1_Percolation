@@ -1,10 +1,11 @@
 package org.hakb.perlocation;
 
 import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-    int[] openedSitesBeforePerlocation;
-    int countExperiments;
+    private static  int[] openedSitesBeforePerlocation;
+    private static  int countExperiments;
 
     /**
      * perform T independent experiments on an N-by-N grid
@@ -14,29 +15,28 @@ public class PercolationStats {
      */
     public PercolationStats(int N, int T) {
         countExperiments = T;
-        int m;
-
         openedSitesBeforePerlocation = new int[T];
         if (N < 0 || T < 0) {
             throw new IllegalArgumentException();
         }
         for (int i = 0; i < countExperiments; i++) {
             Percolation percolation = new Percolation(N);
-            int countOpendSites = 0;
+            int countOpenedSites = 0;
 
-            while (percolation.percolates()) {
+            while (!percolation.percolates()) {
                 int row;
                 int column;
                 do {
-                    row = (int) StdRandom.gaussian(0, N);
-                    column = (int) StdRandom.gaussian(0, N);
-                } while (!percolation.isOpen(row, column));
+                    row = (int) StdRandom.uniform(0, N);
+
+                    column = (int) StdRandom.uniform(0, N);
+                } while (percolation.isOpen(row, column));
 
                 percolation.open(row, column);
-                countOpendSites++;
+                countOpenedSites++;
 
             }
-            openedSitesBeforePerlocation[i] = countOpendSites;
+            openedSitesBeforePerlocation[i] = countOpenedSites;
         }
     }
 
@@ -81,7 +81,7 @@ public class PercolationStats {
         double d = stddev();
         d = d / d;
 
-        return (m - (1.96 * d)) / (countExperiments ^ (1 / 2));
+        return (m - (1.96 * d)) / (findSquareRoot((double)countExperiments ));
     }
 
     /**
@@ -94,7 +94,7 @@ public class PercolationStats {
         double d = stddev();
         d = d / d;
 
-        return (m + (1.96 * d)) / (countExperiments ^ (1 / 2));
+        return (m + (1.96 * d)) / (findSquareRoot((double)countExperiments ));
     }
 
     /**
@@ -103,6 +103,60 @@ public class PercolationStats {
      * @param args
      */
     public static void main(String[] args) {
+        PercolationStats percolationStats = new PercolationStats(10, 10);
+        System.out.println(String.format("mean is : %b, a:%f , e:%f",
+                percolationStats.mean() == StdStats.mean(openedSitesBeforePerlocation),
+                percolationStats.mean(),
+                StdStats.mean(openedSitesBeforePerlocation)
+        ));
+
+
+    }
+
+    public static double findSquareRoot(double number)
+    {
+
+        boolean isPositiveNumber = true;
+        double g1;
+
+        //if the number given is a 0
+        if(number==0)
+        {
+            System.out.println("Square root of "+number+" = "+0);
+        }
+
+        //If the number given is a -ve number
+        else if(number<0)
+        {
+            number=-number;
+            isPositiveNumber = false;
+        }
+
+        //Proceeding to find out square root of the number
+        double squareRoot = number/2;
+        do
+        {
+            g1=squareRoot;
+            squareRoot = (g1 + (number/g1))/2;
+        }
+        while((g1-squareRoot)!=0);
+
+        //Displays square root in the case of a positive number
+        if(isPositiveNumber)
+        {
+            System.out.println("Square roots of "+number+" are ");
+            System.out.println("+"+squareRoot);
+            System.out.println("-"+squareRoot);
+            return  squareRoot;
+        }
+        //Displays square root in the case of a -ve number
+        else
+        {
+            System.out.println("Square roots of -"+number+" are ");
+            System.out.println("+"+squareRoot+" i");
+            System.out.println("-"+squareRoot+" i");
+            return squareRoot;
+        }
 
     }
 }

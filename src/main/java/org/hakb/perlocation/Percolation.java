@@ -5,6 +5,7 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     boolean[][] grid;
     int sideSize;
+    int openedSites;
     WeightedQuickUnionUF weightedQuickUnionUF;
 
     /**
@@ -16,7 +17,7 @@ public class Percolation {
     public Percolation(int sideSize) {
         this.sideSize = sideSize;
         grid = new boolean[sideSize][sideSize];
-        weightedQuickUnionUF = new WeightedQuickUnionUF(grid.length);
+        weightedQuickUnionUF = new WeightedQuickUnionUF(grid.length*grid.length );
 
     }
 
@@ -27,16 +28,25 @@ public class Percolation {
      * @param j column number
      */
     public void open(int i, int j) {
+
+        System.out.println("openedSites = " + ++openedSites);
         grid[i][j] = true;
-        if (isRightOpen(i, j)) {
+        if (checkBound(i) && checkBound(j) && isRightOpen(i, j)) {
             weightedQuickUnionUF.union(i * j, ((++i) * j));
-        } else if (isLeftOpen(i, j)) {
+        } else if (checkBound(i) && checkBound(j) && isLeftOpen(i, j)) {
             weightedQuickUnionUF.union(i * j, ((--i) * j));
-        } else if (isTopOpen(i, j)) {
+        } else if (checkBound(j) && checkBound(i) && isTopOpen(i, j)) {
             weightedQuickUnionUF.union(i * j, ((i) * (++j)));
-        } else if (isBottomOpen(i, j)) {
+        } else if (checkBound(j) && checkBound(i) && isBottomOpen(i, j)) {
             weightedQuickUnionUF.union(i * j, ((i) * (--j)));
         }
+    }
+
+    private boolean checkBound(int point) {
+        if (point > 0 && point < sideSize - 1) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -45,6 +55,7 @@ public class Percolation {
      * @return is site (row i, column j) open?
      */
     public boolean isOpen(int i, int j) {
+
         return grid[i][j];
 
 
@@ -58,7 +69,7 @@ public class Percolation {
      * @return is site (row i, column j) full
      */
     public boolean isFull(int i, int j) {
-        for (int arrayTopNumber = 0; arrayTopNumber < (sideSize ^ 2); --arrayTopNumber) {
+        for (int arrayTopNumber = 0; arrayTopNumber < (sideSize ); --arrayTopNumber) {
             if (weightedQuickUnionUF.connected(i * j, arrayTopNumber)) {
                 return true;
             }
@@ -96,7 +107,7 @@ public class Percolation {
      */
     public boolean percolates() {
         for (int i = 0; i < sideSize; i++) {
-            if (isFull(i, sideSize)) {
+            if (isFull(sideSize, i)) {
                 return true;
             }
         }
