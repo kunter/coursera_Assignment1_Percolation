@@ -1,18 +1,22 @@
 package org.hakb.perlocation;
 
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+
 public class Percolation {
     boolean[][] grid;
+    int sideSize;
+    WeightedQuickUnionUF weightedQuickUnionUF;
 
     /**
      * Create N-by-N grid, with all sites blocked
      *
-     * @param sizeOfSide is a size of array side.
+     * @param sideSize is a size of array side.
      */
 
-    public Percolation(int sizeOfSide) {
-        grid = new boolean[sizeOfSide][sizeOfSide];
-
-
+    public Percolation(int sideSize) {
+        this.sideSize = sideSize;
+        grid = new boolean[sideSize][sideSize];
+        weightedQuickUnionUF = new WeightedQuickUnionUF(grid.length);
 
     }
 
@@ -24,7 +28,15 @@ public class Percolation {
      */
     public void open(int i, int j) {
         grid[i][j] = true;
-
+        if (isRightOpen(i, j)) {
+            weightedQuickUnionUF.union(i * j, ((++i) * j));
+        } else if (isLeftOpen(i, j)) {
+            weightedQuickUnionUF.union(i * j, ((--i) * j));
+        } else if (isTopOpen(i, j)) {
+            weightedQuickUnionUF.union(i * j, ((i) * (++j)));
+        } else if (isBottomOpen(i, j)) {
+            weightedQuickUnionUF.union(i * j, ((i) * (--j)));
+        }
     }
 
     /**
@@ -34,6 +46,8 @@ public class Percolation {
      */
     public boolean isOpen(int i, int j) {
         return grid[i][j];
+
+
     }
 
     /**
@@ -44,8 +58,13 @@ public class Percolation {
      * @return is site (row i, column j) full
      */
     public boolean isFull(int i, int j) {
+        for (int arrayTopNumber = 0; arrayTopNumber < (sideSize ^ 2); --arrayTopNumber) {
+            if (weightedQuickUnionUF.connected(i * j, arrayTopNumber)) {
+                return true;
+            }
+        }
 
-        throw new UnsupportedOperationException("Not ready yet");
+        return false;
     }
 
     private boolean isRightOpen(int i, int j) {
@@ -76,7 +95,13 @@ public class Percolation {
      * @return does the system percolate?
      */
     public boolean percolates() {
-        throw new UnsupportedOperationException("Not ready yet");
+        for (int i = 0; i < sideSize; i++) {
+            if (isFull(i, sideSize)) {
+                return true;
+            }
+        }
+        return false;
+
     }
 
     // test client (optional)
