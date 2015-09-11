@@ -1,7 +1,6 @@
 package org.hakb.perlocation;
 
 import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
     private static  int[] openedSitesBeforePerlocation;
@@ -24,11 +23,11 @@ public class PercolationStats {
             int countOpenedSites = 0;
 
             while (!percolation.percolates()) {
+
                 int row;
                 int column;
                 do {
                     row = (int) StdRandom.uniform(0, N);
-
                     column = (int) StdRandom.uniform(0, N);
                 } while (percolation.isOpen(row, column));
 
@@ -36,6 +35,7 @@ public class PercolationStats {
                 countOpenedSites++;
 
             }
+            System.out.println("percolation = " + percolation.percolates() + "opened: " + countOpenedSites);
             openedSitesBeforePerlocation[i] = countOpenedSites;
         }
     }
@@ -68,7 +68,8 @@ public class PercolationStats {
             double part = ((openedSitesBeforePerlocation[i] - m));
             sum = sum + (part * part);
         }
-        return sum;
+
+        return findSquareRoot(sum/(countExperiments-1));
     }
 
     /**
@@ -103,12 +104,23 @@ public class PercolationStats {
      * @param args
      */
     public static void main(String[] args) {
-        PercolationStats percolationStats = new PercolationStats(10, 10);
-        System.out.println(String.format("mean is : %b, a:%f , e:%f",
-                percolationStats.mean() == StdStats.mean(openedSitesBeforePerlocation),
-                percolationStats.mean(),
-                StdStats.mean(openedSitesBeforePerlocation)
-        ));
+//        Percolation percolation=new Percolation(2);
+//        percolation.open(0,0);
+//        percolation.open(0,1);
+//        percolation.open(1,1);
+//
+//
+//        System.out.println("percolation.percolates() = " + percolation.percolates());
+//
+//
+//        System.out.println(percolation.isOpen(0, 0));
+//        System.out.println(percolation.isOpen(0,1));
+//        System.out.println(percolation.isOpen(1,1));
+//        System.out.println("is connected : "+  percolation.getWeightedQuickUnionUF().connected(0,3));;
+        PercolationStats percolationStats = new PercolationStats(100, 100);
+
+
+
 
 
     }
@@ -122,7 +134,7 @@ public class PercolationStats {
         //if the number given is a 0
         if(number==0)
         {
-            System.out.println("Square root of "+number+" = "+0);
+            return 0;
         }
 
         //If the number given is a -ve number
@@ -144,17 +156,13 @@ public class PercolationStats {
         //Displays square root in the case of a positive number
         if(isPositiveNumber)
         {
-            System.out.println("Square roots of "+number+" are ");
-            System.out.println("+"+squareRoot);
-            System.out.println("-"+squareRoot);
+
             return  squareRoot;
         }
         //Displays square root in the case of a -ve number
         else
         {
-            System.out.println("Square roots of -"+number+" are ");
-            System.out.println("+"+squareRoot+" i");
-            System.out.println("-"+squareRoot+" i");
+
             return squareRoot;
         }
 

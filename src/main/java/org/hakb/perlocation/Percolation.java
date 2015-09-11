@@ -5,8 +5,12 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     boolean[][] grid;
     int sideSize;
-    int openedSites;
     WeightedQuickUnionUF weightedQuickUnionUF;
+
+
+    public void setWeightedQuickUnionUF(WeightedQuickUnionUF weightedQuickUnionUF) {
+        this.weightedQuickUnionUF = weightedQuickUnionUF;
+    }
 
     /**
      * Create N-by-N grid, with all sites blocked
@@ -17,7 +21,7 @@ public class Percolation {
     public Percolation(int sideSize) {
         this.sideSize = sideSize;
         grid = new boolean[sideSize][sideSize];
-        weightedQuickUnionUF = new WeightedQuickUnionUF(grid.length*grid.length );
+        weightedQuickUnionUF = new WeightedQuickUnionUF(grid.length * grid.length);
 
     }
 
@@ -28,17 +32,21 @@ public class Percolation {
      * @param j column number
      */
     public void open(int i, int j) {
-
-        System.out.println("openedSites = " + ++openedSites);
+//        System.out.println("openedSites = " + ++openedSites);
         grid[i][j] = true;
-        if (checkBound(i) && checkBound(j) && isRightOpen(i, j)) {
-            weightedQuickUnionUF.union(i * j, ((++i) * j));
-        } else if (checkBound(i) && checkBound(j) && isLeftOpen(i, j)) {
-            weightedQuickUnionUF.union(i * j, ((--i) * j));
-        } else if (checkBound(j) && checkBound(i) && isTopOpen(i, j)) {
-            weightedQuickUnionUF.union(i * j, ((i) * (++j)));
-        } else if (checkBound(j) && checkBound(i) && isBottomOpen(i, j)) {
-            weightedQuickUnionUF.union(i * j, ((i) * (--j)));
+
+        if (j < (sideSize - 1) && isRightOpen(i, j)) {
+            weightedQuickUnionUF.union((i * sideSize) + j, ((i) * sideSize) + (j+1));
+        }
+        if (j > 0 && isLeftOpen(i, j)) {
+            weightedQuickUnionUF.union((i * sideSize) + j, ((i) * sideSize) + (j-1));
+        }
+        if (i > 0 && isTopOpen(i, j)) {
+            weightedQuickUnionUF.union((i * sideSize) + j, ((i-1) * sideSize) + (j));
+        }
+        if (i < (sideSize - 1) && isBottomOpen(i, j)) {
+
+            weightedQuickUnionUF.union((i * sideSize) + j, ((1+i) * sideSize) + (j));
         }
     }
 
@@ -69,8 +77,8 @@ public class Percolation {
      * @return is site (row i, column j) full
      */
     public boolean isFull(int i, int j) {
-        for (int arrayTopNumber = 0; arrayTopNumber < (sideSize ); --arrayTopNumber) {
-            if (weightedQuickUnionUF.connected(i * j, arrayTopNumber)) {
+        for (int arrayTopNumber = 0; arrayTopNumber < (sideSize); arrayTopNumber++) {
+            if (weightedQuickUnionUF.connected((i * sideSize) + j, arrayTopNumber)) {
                 return true;
             }
         }
@@ -78,20 +86,24 @@ public class Percolation {
         return false;
     }
 
+    public int convertNumber(int i, int j) {
+        return (i * sideSize) + j;
+    }
+
     private boolean isRightOpen(int i, int j) {
-        return isOpen(++i, j);
-    }
-
-    private boolean isLeftOpen(int i, int j) {
-        return isOpen(--i, j);
-    }
-
-    private boolean isTopOpen(int i, int j) {
         return isOpen(i, ++j);
     }
 
-    private boolean isBottomOpen(int i, int j) {
+    private boolean isLeftOpen(int i, int j) {
         return isOpen(i, --j);
+    }
+
+    private boolean isTopOpen(int i, int j) {
+        return isOpen(--i, j);
+    }
+
+    private boolean isBottomOpen(int i, int j) {
+        return isOpen(++i, j);
     }
 
 
@@ -106,8 +118,8 @@ public class Percolation {
      * @return does the system percolate?
      */
     public boolean percolates() {
-        for (int i = 0; i < sideSize; i++) {
-            if (isFull(sideSize, i)) {
+        for (int j = 0; j < sideSize; j++) {
+            if (isFull(sideSize - 1, j)) {
                 return true;
             }
         }
