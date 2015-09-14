@@ -3,14 +3,9 @@ package org.hakb.perlocation;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    boolean[][] grid;
-    int sideSize;
-    WeightedQuickUnionUF weightedQuickUnionUF;
-
-
-    public void setWeightedQuickUnionUF(WeightedQuickUnionUF weightedQuickUnionUF) {
-        this.weightedQuickUnionUF = weightedQuickUnionUF;
-    }
+    private boolean[][] grid;
+    private int sideSize;
+    private WeightedQuickUnionUF weightedQuickUnionUF;
 
     /**
      * Create N-by-N grid, with all sites blocked
@@ -19,6 +14,9 @@ public class Percolation {
      */
 
     public Percolation(int sideSize) {
+        if (sideSize <= 0) {
+            throw new IllegalArgumentException("Wrong N: " + sideSize);
+        }
         this.sideSize = sideSize;
         grid = new boolean[sideSize][sideSize];
         weightedQuickUnionUF = new WeightedQuickUnionUF(grid.length * grid.length);
@@ -32,21 +30,35 @@ public class Percolation {
      * @param j column number
      */
     public void open(int i, int j) {
-//        System.out.println("openedSites = " + ++openedSites);
-        grid[i][j] = true;
+        validateBounds(i, j);
+        grid[i - 1][j - 1] = true;
 
-        if (j < (sideSize - 1) && isRightOpen(i, j)) {
-            weightedQuickUnionUF.union((i * sideSize) + j, ((i) * sideSize) + (j+1));
-        }
-        if (j > 0 && isLeftOpen(i, j)) {
-            weightedQuickUnionUF.union((i * sideSize) + j, ((i) * sideSize) + (j-1));
-        }
-        if (i > 0 && isTopOpen(i, j)) {
-            weightedQuickUnionUF.union((i * sideSize) + j, ((i-1) * sideSize) + (j));
-        }
-        if (i < (sideSize - 1) && isBottomOpen(i, j)) {
+        int offsetCol = j - 1;
+        int offsetRow = i - 1;
 
-            weightedQuickUnionUF.union((i * sideSize) + j, ((1+i) * sideSize) + (j));
+        if (offsetCol < (sideSize - 1) && isRightOpen(i, j)) {
+            weightedQuickUnionUF.union((offsetRow * sideSize) + offsetCol, ((offsetRow) * sideSize) + (offsetCol + 1));
+        }
+        if (offsetCol > 0 && isLeftOpen(i, j)) {
+            weightedQuickUnionUF.union((offsetRow * sideSize) + offsetCol, ((offsetRow) * sideSize) + (offsetCol - 1));
+        }
+        if (offsetRow > 0 && isTopOpen(i, j)) {
+            weightedQuickUnionUF.union((offsetRow * sideSize) + offsetRow, ((offsetCol - 1) * sideSize) + (offsetCol));
+        }
+        if (offsetRow < (sideSize - 1) && isBottomOpen(i, j)) {
+
+            weightedQuickUnionUF.union((offsetRow * sideSize) + offsetCol, ((1 + offsetRow) * sideSize) + (offsetCol));
+        }
+    }
+
+    private void validateBounds(int row, int column) {
+        validateBound(row);
+        validateBound(column);
+    }
+
+    private void validateBound(int value) {
+        if (!((value >= 1) && (value <= sideSize))) {
+            throw new IndexOutOfBoundsException("valus is: " + value);
         }
     }
 
@@ -63,8 +75,8 @@ public class Percolation {
      * @return is site (row i, column j) open?
      */
     public boolean isOpen(int i, int j) {
-
-        return grid[i][j];
+        validateBounds(i, j);
+        return grid[i - 1][j - 1];
 
 
     }
@@ -77,33 +89,37 @@ public class Percolation {
      * @return is site (row i, column j) full
      */
     public boolean isFull(int i, int j) {
-        for (int arrayTopNumber = 0; arrayTopNumber < (sideSize); arrayTopNumber++) {
-            if (weightedQuickUnionUF.connected((i * sideSize) + j, arrayTopNumber)) {
-                return true;
+        validateBounds(i, j);
+        if (i == 1) {
+            for (int col = 0; col < sideSize; col++) {
+                if (weightedQuickUnionUF.connected(col, (sideSize - 1) * (sideSize) + col)) {
+                    return true;
+                }
+            }
+        } else {
+            for (int topValue = 0; topValue < (sideSize); topValue++) {
+                if (weightedQuickUnionUF.connected(topValue, (i * sideSize) + j)) {
+                    return true;
+                }
             }
         }
-
         return false;
     }
 
-    public int convertNumber(int i, int j) {
-        return (i * sideSize) + j;
+    private boolean isRightOpen(int row, int col) {
+        return isOpen(row, col + 1);
     }
 
-    private boolean isRightOpen(int i, int j) {
-        return isOpen(i, ++j);
+    private boolean isLeftOpen(int row, int col) {
+        return isOpen(row, col - 1);
     }
 
-    private boolean isLeftOpen(int i, int j) {
-        return isOpen(i, --j);
+    private boolean isTopOpen(int row, int col) {
+        return isOpen(row + 1, col);
     }
 
-    private boolean isTopOpen(int i, int j) {
-        return isOpen(--i, j);
-    }
-
-    private boolean isBottomOpen(int i, int j) {
-        return isOpen(++i, j);
+    private boolean isBottomOpen(int row, int col) {
+        return isOpen(row - 1, col);
     }
 
 
