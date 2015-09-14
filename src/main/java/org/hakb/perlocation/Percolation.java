@@ -36,17 +36,16 @@ public class Percolation {
         int offsetCol = j - 1;
         int offsetRow = i - 1;
 
-        if (offsetCol < (sideSize - 1) && isRightOpen(i, j)) {
+        if (j < (sideSize) && isRightOpen(i, j)) {
             weightedQuickUnionUF.union((offsetRow * sideSize) + offsetCol, ((offsetRow) * sideSize) + (offsetCol + 1));
         }
-        if (offsetCol > 0 && isLeftOpen(i, j)) {
+        if (j > 1 && isLeftOpen(i, j)) {
             weightedQuickUnionUF.union((offsetRow * sideSize) + offsetCol, ((offsetRow) * sideSize) + (offsetCol - 1));
         }
-        if (offsetRow > 0 && isTopOpen(i, j)) {
-            weightedQuickUnionUF.union((offsetRow * sideSize) + offsetRow, ((offsetCol - 1) * sideSize) + (offsetCol));
+        if (i > 1 && isTopOpen(i, j)) {
+            weightedQuickUnionUF.union((offsetRow * sideSize) + offsetCol, ((offsetRow - 1) * sideSize) + (offsetCol));
         }
-        if (offsetRow < (sideSize - 1) && isBottomOpen(i, j)) {
-
+        if (i < sideSize && isBottomOpen(i, j)) {
             weightedQuickUnionUF.union((offsetRow * sideSize) + offsetCol, ((1 + offsetRow) * sideSize) + (offsetCol));
         }
     }
@@ -62,12 +61,6 @@ public class Percolation {
         }
     }
 
-    private boolean checkBound(int point) {
-        if (point > 0 && point < sideSize - 1) {
-            return true;
-        }
-        return false;
-    }
 
     /**
      * @param i row array number
@@ -90,6 +83,8 @@ public class Percolation {
      */
     public boolean isFull(int i, int j) {
         validateBounds(i, j);
+        int offsetCol = j - 1;
+        int offsetRow = i - 1;
         if (i == 1) {
             for (int col = 0; col < sideSize; col++) {
                 if (weightedQuickUnionUF.connected(col, (sideSize - 1) * (sideSize) + col)) {
@@ -98,7 +93,7 @@ public class Percolation {
             }
         } else {
             for (int topValue = 0; topValue < (sideSize); topValue++) {
-                if (weightedQuickUnionUF.connected(topValue, (i * sideSize) + j)) {
+                if (weightedQuickUnionUF.connected(topValue, (offsetRow * sideSize) + offsetCol)) {
                     return true;
                 }
             }
@@ -115,11 +110,11 @@ public class Percolation {
     }
 
     private boolean isTopOpen(int row, int col) {
-        return isOpen(row + 1, col);
+        return isOpen(row - 1, col);
     }
 
     private boolean isBottomOpen(int row, int col) {
-        return isOpen(row - 1, col);
+        return isOpen(row + 1, col);
     }
 
 
@@ -134,7 +129,7 @@ public class Percolation {
      * @return does the system percolate?
      */
     public boolean percolates() {
-        for (int j = 0; j < sideSize; j++) {
+        for (int j = 1; j <= sideSize; j++) {
             if (isFull(sideSize - 1, j)) {
                 return true;
             }

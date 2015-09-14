@@ -3,8 +3,8 @@ package org.hakb.perlocation;
 import edu.princeton.cs.algs4.StdRandom;
 
 public class PercolationStats {
-    private static  int[] openedSitesBeforePerlocation;
-    private static  int countExperiments;
+    private static int[] openedSitesBeforePerlocation;
+    private static int countExperiments;
 
     /**
      * perform T independent experiments on an N-by-N grid
@@ -27,8 +27,8 @@ public class PercolationStats {
                 int row;
                 int column;
                 do {
-                    row = (int) StdRandom.uniform(0, N);
-                    column = (int) StdRandom.uniform(0, N);
+                    row = (int) StdRandom.uniform(1, N);
+                    column = (int) StdRandom.uniform(1, N);
                 } while (percolation.isOpen(row, column));
 
                 percolation.open(row, column);
@@ -69,7 +69,7 @@ public class PercolationStats {
             sum = sum + (part * part);
         }
 
-        return findSquareRoot(sum/(countExperiments-1));
+        return findSquareRoot(sum / (countExperiments - 1));
     }
 
     /**
@@ -82,7 +82,7 @@ public class PercolationStats {
         double d = stddev();
         d = d / d;
 
-        return (m - (1.96 * d)) / (findSquareRoot((double)countExperiments ));
+        return (m - (1.96 * d)) / (findSquareRoot((double) countExperiments));
     }
 
     /**
@@ -95,7 +95,7 @@ public class PercolationStats {
         double d = stddev();
         d = d / d;
 
-        return (m + (1.96 * d)) / (findSquareRoot((double)countExperiments ));
+        return (m + (1.96 * d)) / (findSquareRoot((double) countExperiments));
     }
 
     /**
@@ -120,48 +120,39 @@ public class PercolationStats {
         PercolationStats percolationStats = new PercolationStats(100, 100);
 
 
-
-
-
     }
 
-    public static double findSquareRoot(double number)
-    {
+    public static double findSquareRoot(double number) {
 
         boolean isPositiveNumber = true;
         double g1;
 
         //if the number given is a 0
-        if(number==0)
-        {
+        if (number == 0) {
             return 0;
         }
 
         //If the number given is a -ve number
-        else if(number<0)
-        {
-            number=-number;
+        else if (number < 0) {
+            number = -number;
             isPositiveNumber = false;
         }
 
         //Proceeding to find out square root of the number
-        double squareRoot = number/2;
-        do
-        {
-            g1=squareRoot;
-            squareRoot = (g1 + (number/g1))/2;
+        double squareRoot = number / 2;
+        do {
+            g1 = squareRoot;
+            squareRoot = (g1 + (number / g1)) / 2;
         }
-        while((g1-squareRoot)!=0);
+        while ((g1 - squareRoot) != 0);
 
         //Displays square root in the case of a positive number
-        if(isPositiveNumber)
-        {
+        if (isPositiveNumber) {
 
-            return  squareRoot;
+            return squareRoot;
         }
         //Displays square root in the case of a -ve number
-        else
-        {
+        else {
 
             return squareRoot;
         }
