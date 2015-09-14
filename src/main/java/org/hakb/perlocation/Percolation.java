@@ -87,7 +87,7 @@ public class Percolation {
         int offsetRow = i - 1;
         if (i == 1) {
             for (int col = 0; col < sideSize; col++) {
-                if (weightedQuickUnionUF.connected(col, (sideSize - 1) * (sideSize) + col)) {
+                if (weightedQuickUnionUF.connected(offsetRow * (sideSize - 1) + offsetCol, (sideSize - 1) * (sideSize) + col)) {
                     return true;
                 }
             }
