@@ -122,7 +122,7 @@ public class PercolationStats {
 
     }
 
-    public static double findSquareRoot(double number) {
+    private double findSquareRoot(double number) {
 
         boolean isPositiveNumber = true;
         double g1;
