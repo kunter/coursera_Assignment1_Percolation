@@ -76,7 +76,7 @@ public class PercolationStats {
         double mean = mean();
         double stddev = stddev();
 
-        return (mean - ((1.96 * Math.sqrt(stddev))) / (Math.sqrt((double) countExperiments)));
+        return (mean - ((1.96 * stddev)) / (Math.sqrt((double) countExperiments)));
     }
 
     /**
@@ -89,7 +89,7 @@ public class PercolationStats {
         double d = stddev();
 
 
-        return (m + ((1.96 * Math.sqrt(d))) / (Math.sqrt((double) countExperiments)));
+        return (m + ((1.96 * d)) / (Math.sqrt((double) countExperiments)));
     }
 
     /**
@@ -112,7 +112,11 @@ public class PercolationStats {
 //        System.out.println(percolation.isOpen(1,1));
 //        System.out.println("is connected : "+  percolation.getWeightedQuickUnionUF().connected(0,3));;
         PercolationStats percolationStats = new PercolationStats(20, 10);
-//        System.out.println("percolationStats.mean() = " + percolationStats.mean());
+        System.out.println("percolationStats.mean() = " + percolationStats.mean());
+        System.out.println("percolationStats.stddev() = " + percolationStats.stddev());
+        System.out.println("percolationStats.confidenceLo() = " + percolationStats.confidenceLo());
+        System.out.println("percolationStats.confidenceHi() = " + percolationStats.confidenceHi());
+
 //        System.out.println("percolationStats = " + StdStats.mean(openedSitesBeforePerlocation));
         ;
 
