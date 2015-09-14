@@ -75,7 +75,8 @@ public class Percolation {
     }
 
     /**
-     * A full site is an open site that can be connected to an open site in the top row via a chain of neighboring (left, right, up, down) open sites
+     * A full site is an open site that can be connected to an open site in the top row
+     * via a chain of neighboring (left, right, up, down) open sites
      *
      * @param i row number
      * @param j column number
@@ -83,14 +84,13 @@ public class Percolation {
      */
     public boolean isFull(int i, int j) {
         validateBounds(i, j);
+        if (!isOpen(i, j)) {
+            return false;
+        }
         int offsetCol = j - 1;
         int offsetRow = i - 1;
         if (i == 1) {
-            for (int col = 0; col < sideSize; col++) {
-                if (weightedQuickUnionUF.connected(offsetRow * (sideSize - 1) + offsetCol, (sideSize - 1) * (sideSize) + col)) {
-                    return true;
-                }
-            }
+            return true;
         } else {
             for (int topValue = 0; topValue < (sideSize); topValue++) {
                 if (weightedQuickUnionUF.connected(topValue, (offsetRow * sideSize) + offsetCol)) {

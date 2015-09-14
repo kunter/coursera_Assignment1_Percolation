@@ -126,23 +126,24 @@ public class PercolationStats {
 
         boolean isPositiveNumber = true;
         double g1;
+        double _number=number;
 
         //if the number given is a 0
-        if (number == 0) {
+        if (_number == 0) {
             return 0;
         }
 
         //If the number given is a -ve number
-        else if (number < 0) {
-            number = -number;
+        else if (_number < 0) {
+            _number = -_number;
             isPositiveNumber = false;
         }
 
         //Proceeding to find out square root of the number
-        double squareRoot = number / 2;
+        double squareRoot = _number / 2;
         do {
             g1 = squareRoot;
-            squareRoot = (g1 + (number / g1)) / 2;
+            squareRoot = (g1 + (_number / g1)) / 2;
         }
         while ((g1 - squareRoot) != 0);
 
