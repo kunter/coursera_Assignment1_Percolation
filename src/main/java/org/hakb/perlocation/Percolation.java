@@ -6,6 +6,8 @@ public class Percolation {
     private boolean[][] grid;
     private int sideSize;
     private WeightedQuickUnionUF weightedQuickUnionUF;
+    private boolean bottomRowIsOpened;
+
 
     /**
      * Create N-by-N grid, with all sites blocked
@@ -29,10 +31,11 @@ public class Percolation {
      *
      * @param i row number
      * @param j column number
-     * @throws IndexOutOfBoundsException if  0<= i < N  or 0<= j < N
+     * @throws IndexOutOfBoundsException if  0< i <= N  or 0< j <= N
      */
     public void open(int i, int j) {
         validateBounds(i, j);
+        checkBottomRow(i);
         grid[i - 1][j - 1] = true;
 
         int offsetCol = j - 1;
@@ -49,6 +52,12 @@ public class Percolation {
         }
         if (i < sideSize && isBottomOpen(i, j)) {
             weightedQuickUnionUF.union((offsetRow * sideSize) + offsetCol, ((1 + offsetRow) * sideSize) + (offsetCol));
+        }
+    }
+
+    private void checkBottomRow(int row) {
+        if(row==sideSize){
+            bottomRowIsOpened=true;
         }
     }
 
@@ -134,6 +143,7 @@ public class Percolation {
      * @return does the system percolate?
      */
     public boolean percolates() {
+        if (!bottomRowIsOpened) return false;
         for (int j = 1; j <= sideSize; j++) {
             if (isOpen(sideSize, j) && isFull(sideSize, j)) {
                 return true;

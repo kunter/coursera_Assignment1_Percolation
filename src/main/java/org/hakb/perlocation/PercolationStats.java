@@ -3,21 +3,21 @@ package org.hakb.perlocation;
 import edu.princeton.cs.algs4.StdRandom;
 
 public class PercolationStats {
-    private static int[] openedSitesBeforePerlocation;
+    private static double[] openedSitesBeforePerlocation;
     private static int countExperiments;
 
     /**
-     * perform T independent experiments on an N-by-N grid
+     * Perform T independent experiments on an N-by-N grid
      *
-     * @param N
-     * @param T
+     * @param N - size of side
+     * @param T - count of experiments
      */
     public PercolationStats(int N, int T) {
-        countExperiments = T;
-        openedSitesBeforePerlocation = new int[T];
-        if (N < 0 || T < 0) {
-            throw new IllegalArgumentException();
+        if (N <= 0 || T <= 0) {
+            throw new IllegalArgumentException("wrong args N:" + N + "  T:" + T);
         }
+        countExperiments = T;
+        openedSitesBeforePerlocation = new double[T];
         for (int i = 0; i < countExperiments; i++) {
             Percolation percolation = new Percolation(N);
             int countOpenedSites = 0;
@@ -27,13 +27,13 @@ public class PercolationStats {
                 int row;
                 int column;
                 do {
-                    row = StdRandom.uniform(1, N);
-                    column = StdRandom.uniform(1, N);
+                    row = StdRandom.uniform(1, N + 1);
+                    column = StdRandom.uniform(1, N + 1);
                 } while (percolation.isOpen(row, column));
                 percolation.open(row, column);
                 countOpenedSites++;
             }
-            openedSitesBeforePerlocation[i] = countOpenedSites;
+            openedSitesBeforePerlocation[i] = (double) countOpenedSites / (N * N);
         }
     }
 
@@ -44,13 +44,11 @@ public class PercolationStats {
      * @return
      */
     public double mean() {
-        int sum = 0;
+        double sum = 0;
         for (int i = 0; i < countExperiments; i++) {
-            sum = sum + openedSitesBeforePerlocation[i];
+            sum = sum + (openedSitesBeforePerlocation[i]);
         }
-
-
-        return ((double) sum / countExperiments);
+        return (sum / countExperiments);
     }
 
     /**
@@ -66,7 +64,7 @@ public class PercolationStats {
             sum = sum + (part * part);
         }
 
-        return findSquareRoot(sum / (countExperiments - 1));
+        return Math.sqrt(sum / (countExperiments - 1));
     }
 
     /**
@@ -75,11 +73,10 @@ public class PercolationStats {
      * @return
      */
     public double confidenceLo() {
-        double m = mean();
-        double d = stddev();
-        d = d / d;
+        double mean = mean();
+        double stddev = stddev();
 
-        return (m - (1.96 * d)) / (findSquareRoot((double) countExperiments));
+        return (mean - ((1.96 * Math.sqrt(stddev))) / (Math.sqrt((double) countExperiments)));
     }
 
     /**
@@ -90,9 +87,9 @@ public class PercolationStats {
     public double confidenceHi() {
         double m = mean();
         double d = stddev();
-        d = d / d;
 
-        return (m + (1.96 * d)) / (findSquareRoot((double) countExperiments));
+
+        return (m + ((1.96 * Math.sqrt(d))) / (Math.sqrt((double) countExperiments)));
     }
 
     /**
@@ -114,46 +111,11 @@ public class PercolationStats {
 //        System.out.println(percolation.isOpen(0,1));
 //        System.out.println(percolation.isOpen(1,1));
 //        System.out.println("is connected : "+  percolation.getWeightedQuickUnionUF().connected(0,3));;
-        PercolationStats percolationStats = new PercolationStats(100, 100);
+        PercolationStats percolationStats = new PercolationStats(20, 10);
+//        System.out.println("percolationStats.mean() = " + percolationStats.mean());
+//        System.out.println("percolationStats = " + StdStats.mean(openedSitesBeforePerlocation));
+        ;
 
-
-    }
-
-    private double findSquareRoot(double number) {
-
-        boolean isPositiveNumber = true;
-        double g1;
-        double _number = number;
-
-        //if the number given is a 0
-        if (_number == 0) {
-            return 0;
-        }
-
-        //If the number given is a -ve number
-        else if (_number < 0) {
-            _number = -_number;
-            isPositiveNumber = false;
-        }
-
-        //Proceeding to find out square root of the number
-        double squareRoot = _number / 2;
-        do {
-            g1 = squareRoot;
-            squareRoot = (g1 + (_number / g1)) / 2;
-        }
-        while ((g1 - squareRoot) != 0);
-
-        //Displays square root in the case of a positive number
-        if (isPositiveNumber) {
-
-            return squareRoot;
-        }
-        //Displays square root in the case of a -ve number
-        else {
-
-            return squareRoot;
-        }
 
     }
 }
