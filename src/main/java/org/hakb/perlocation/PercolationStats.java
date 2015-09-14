@@ -27,8 +27,8 @@ public class PercolationStats {
                 int row;
                 int column;
                 do {
-                    row = (int) StdRandom.uniform(1, N);
-                    column = (int) StdRandom.uniform(1, N);
+                    row = StdRandom.uniform(1, N);
+                    column = StdRandom.uniform(1, N);
                 } while (percolation.isOpen(row, column));
 
                 percolation.open(row, column);
@@ -126,7 +126,7 @@ public class PercolationStats {
 
         boolean isPositiveNumber = true;
         double g1;
-        double _number=number;
+        double _number = number;
 
         //if the number given is a 0
         if (_number == 0) {

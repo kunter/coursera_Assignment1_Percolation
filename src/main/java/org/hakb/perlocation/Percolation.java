@@ -11,6 +11,7 @@ public class Percolation {
      * Create N-by-N grid, with all sites blocked
      *
      * @param sideSize is a size of array side.
+     * @throws IllegalArgumentException if  sideSize <= 0
      */
 
     public Percolation(int sideSize) {
@@ -28,6 +29,7 @@ public class Percolation {
      *
      * @param i row number
      * @param j column number
+     * @throws IndexOutOfBoundsException if  0<= i < N  or 0<= j < N
      */
     public void open(int i, int j) {
         validateBounds(i, j);
@@ -66,6 +68,7 @@ public class Percolation {
      * @param i row array number
      * @param j column array number
      * @return is site (row i, column j) open?
+     * @throws IndexOutOfBoundsException if  0<= i < N  or 0<= j < N
      */
     public boolean isOpen(int i, int j) {
         validateBounds(i, j);
@@ -81,6 +84,7 @@ public class Percolation {
      * @param i row number
      * @param j column number
      * @return is site (row i, column j) full
+     * @throws IndexOutOfBoundsException if  0<= i < N  or 0<= j < N
      */
     public boolean isFull(int i, int j) {
         validateBounds(i, j);
@@ -92,8 +96,9 @@ public class Percolation {
         if (i == 1) {
             return true;
         } else {
-            for (int topValue = 0; topValue < (sideSize); topValue++) {
-                if (weightedQuickUnionUF.connected(topValue, (offsetRow * sideSize) + offsetCol)) {
+            for (int topColumn = 0; topColumn < (sideSize); topColumn++) {
+
+                if (isOpen(1, topColumn + 1) && weightedQuickUnionUF.connected(topColumn, (offsetRow * sideSize) + offsetCol)) {
                     return true;
                 }
             }
@@ -130,7 +135,7 @@ public class Percolation {
      */
     public boolean percolates() {
         for (int j = 1; j <= sideSize; j++) {
-            if (isFull(sideSize - 1, j)) {
+            if (isOpen(sideSize, j) && isFull(sideSize, j)) {
                 return true;
             }
         }
