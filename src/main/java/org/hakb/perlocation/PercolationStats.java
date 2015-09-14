@@ -22,7 +22,7 @@ public class PercolationStats {
             Percolation percolation = new Percolation(N);
             int countOpenedSites = 0;
 
-            while (!percolation.percolates()) {
+            while (countOpenedSites < N || !percolation.percolates()) {
 
                 int row;
                 int column;
@@ -30,12 +30,9 @@ public class PercolationStats {
                     row = StdRandom.uniform(1, N);
                     column = StdRandom.uniform(1, N);
                 } while (percolation.isOpen(row, column));
-
                 percolation.open(row, column);
                 countOpenedSites++;
-
             }
-            System.out.println("percolation = " + percolation.percolates() + "opened: " + countOpenedSites);
             openedSitesBeforePerlocation[i] = countOpenedSites;
         }
     }
